@@ -15,7 +15,7 @@ public class IngredienteTest
     @BeforeEach
     void setUp( ) throws Exception
     {
-        ingrediente1 = new Ingrediente( "tomate", 1000 );
+        ingrediente1 = new Ingrediente( "Tomate", 1000 );
     }
 
     @AfterEach
@@ -26,7 +26,7 @@ public class IngredienteTest
     @Test
     void testGetNombre( )
     {
-        assertEquals( "tomate", ingrediente1.getNombre( ), "El nombre del ingrediente no es el esperado." );
+        assertEquals( "Tomate", ingrediente1.getNombre( ), "El nombre del ingrediente no es el esperado." );
     }
 
     @Test

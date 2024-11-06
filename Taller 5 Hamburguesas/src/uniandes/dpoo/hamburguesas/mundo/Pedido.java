@@ -63,7 +63,7 @@ public class Pedido
     {
         return idPedido;
     }
-
+ 
     /**
      * Retorna el nombre del cliente
      * @return

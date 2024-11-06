@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
+import org.junit.jupiter.api.AfterEach;
 
 
 
@@ -33,7 +34,7 @@ public class ProductoMenuTest {
         assertEquals("Hamburguesa\n            10000\n", productoMenu.generarTextoFactura(), "El texto de la factura no es el esperado.");
     }
 
-   @After
+   @AfterEach
     public void tearDown() {
         productoMenu = null;
     } 

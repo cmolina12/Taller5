@@ -25,6 +25,12 @@ public class ProductoAjustadoTest {
     }
 
     @Test
+    void testGetNombre() {
+    	assertEquals("Hamburguesa", productoAjustado.getNombre(), "El nombre del producto ajustado no es el esperado.");
+    }
+    
+    
+    @Test
     void testPrecioConUnIngrediente() {
         productoAjustado.agregarIngrediente(queso);
         assertEquals(12000, productoAjustado.getPrecio(), "El precio con un ingrediente adicional no es el esperado.");
