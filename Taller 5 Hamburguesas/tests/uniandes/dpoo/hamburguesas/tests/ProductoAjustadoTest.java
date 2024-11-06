@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uniandes.dpoo.hamburguesas.mundo.ProductoAjustado;
@@ -54,13 +55,16 @@ public class ProductoAjustadoTest {
         productoAjustado.agregarIngrediente(queso);
         productoAjustado.eliminarIngrediente(tomate);  // Tomate no afecta el precio
         String factura = productoAjustado.generarTextoFactura();
+
+        System.out.println(productoAjustado.generarTextoFactura());
+
         assertTrue(factura.contains("Hamburguesa"));
         assertTrue(factura.contains("+Queso"));
         assertTrue(factura.contains("-Tomate"));
         assertTrue(factura.contains("12000"), "El texto de la factura no contiene el precio esperado.");
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         productoAjustado = null;
         queso = null;

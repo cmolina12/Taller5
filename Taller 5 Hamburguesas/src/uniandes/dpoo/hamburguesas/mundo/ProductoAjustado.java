@@ -46,11 +46,8 @@ public class ProductoAjustado implements Producto
 
     public void eliminarIngrediente( Ingrediente ingrediente )
     {
-        if (agregados.contains(ingrediente))
-        {
-            agregados.remove(ingrediente);
-            eliminados.add( ingrediente );
-        }
+        
+    	eliminados.add( ingrediente );
     
     }
 
@@ -64,20 +61,25 @@ public class ProductoAjustado implements Producto
     {
         int precio = productoBase.getPrecio( );
 
-        if (agregados.size( ) > 0)
-        {
-            for( Ingrediente ing : agregados )
-        {
-            precio += ing.getCostoAdicional( );
+        ArrayList<Ingrediente> ingredientesFinales = new ArrayList<>(agregados);
+        
+        // Remover ingredietnes en eliminados de la lista de agregados para calcular el precio final
+        
+        for (Ingrediente ingEliminado : eliminados) {
+        	ingredientesFinales.remove(ingEliminado);        
+        	}
+        
+        
+        // Sumar el costo de los ingredientes finales al precio base
+        
+        for (Ingrediente ing : ingredientesFinales) {
+        	precio += ing.getCostoAdicional();
         }
-        } else {
-            precio = productoBase.getPrecio( );
-        }
-
+        
         return precio;
       
 
-
+        
     }
 
     /**
@@ -89,7 +91,11 @@ public class ProductoAjustado implements Producto
     public String generarTextoFactura( )
     {
         StringBuffer sb = new StringBuffer( );
-        sb.append( productoBase );
+        sb.append(productoBase.getNombre()); // Nombre del producto base
+        sb.append("            " + productoBase.getPrecio( ) + "\n"); // Mostrar el precio del producto base
+       
+        
+        
         for( Ingrediente ing : agregados )
         {
             sb.append( "    +" + ing.getNombre( ) );
@@ -99,10 +105,26 @@ public class ProductoAjustado implements Producto
         {
             sb.append( "    -" + ing.getNombre( ) );
         }
+        
+        // Crear la lista de ingredientes que afectan el precio
+        ArrayList<Ingrediente> ingredientesFinales = new ArrayList<>(agregados);
+        for (Ingrediente ingEliminado : eliminados) {
+            ingredientesFinales.remove(ingEliminado);
+        }
+
+        // Mostrar los ingredientes finales (que afectan el precio) con su costo
+        for (Ingrediente ing : ingredientesFinales) {
+            sb.append("    +").append(ing.getNombre());
+            sb.append("                ").append(ing.getCostoAdicional()).append("\n");
+        }
 
         sb.append( "            " + getPrecio( ) + "\n" );
 
+        // Linea de depuracion
+        System.out.println(sb.toString());
+        
         return sb.toString( );
+        
     }
 
 }
