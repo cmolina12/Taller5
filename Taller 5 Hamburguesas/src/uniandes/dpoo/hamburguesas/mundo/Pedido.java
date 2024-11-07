@@ -53,6 +53,7 @@ public class Pedido
         this.nombreCliente = nombreCliente;
         this.direccionCliente = direccionCliente;
         productos = new ArrayList<Producto>( );
+        System.out.println("Valor actual de numeroPedidos: " + numeroPedidos);
     }
 
     /**
@@ -82,6 +83,14 @@ public class Pedido
         productos.add( nuevoProducto );
     }
 
+    public int getSizeProductos(){
+        return (productos.size());
+    }
+
+    public static void reiniciarContadorPedidos(){
+        numeroPedidos = 0;
+    }
+
     /**
      * Retorna el precio total del pedido, basado en el valor de cada uno de los productos y en el IVA
      * @return La sumatoria de los precios de los productos con el valor adicional del IVA
@@ -95,7 +104,7 @@ public class Pedido
      * Retorna el precio de los productos del pedido
      * @return La sumatoria de los precios de los productos
      */
-    private int getPrecioNetoPedido( )
+    public int getPrecioNetoPedido( )
     {
         int valor = 0;
         for( Producto item : productos )
@@ -109,7 +118,7 @@ public class Pedido
      * Retorna el valor del IVA del producto, que corresponde al 19% del precio neto
      * @return
      */
-    private int getPrecioIVAPedido( )
+    public int getPrecioIVAPedido( )
     {
         return ( int ) ( getPrecioNetoPedido( ) * IVA );
     }
@@ -146,6 +155,8 @@ public class Pedido
         sb.append( "IVA:          " + getPrecioIVAPedido( ) + "\n" );
         sb.append( "Precio Total: " + getPrecioTotalPedido( ) + "\n" );
 
+        System.out.println( sb.toString( ) );
+
         return sb.toString( );
     }
 
@@ -162,6 +173,9 @@ public class Pedido
         out = new PrintWriter( archivo );
         out.print( factura );
         out.close( );
+
+        System.out.println( "Factura guardada en " + archivo.getAbsolutePath( ) );
+        System.out.println( factura );
     }
 
 }
