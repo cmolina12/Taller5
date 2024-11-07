@@ -1,0 +1,10 @@
+
+Cliente: Lorenzo
+Dirección: Cra 54#132-132
+----------------
+wrap de lomo - $22000
+agua cristal con gas - $5000
+----------------
+Precio Neto:  27000
+IVA:          5130
+Precio Total: 32130

@@ -1,0 +1,12 @@
+
+Cliente: Camilo Molina
+Dirección: Cra 54 #132-175
+----------------
+corralita - $13000
+papas en casco grandes - $6900
+gaseosa - $5000
+combo todoterreno - $34317
+----------------
+Precio Neto:  59217
+IVA:          11251
+Precio Total: 70468

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import org.junit.jupiter.api.*;
+
 import uniandes.dpoo.hamburguesas.excepciones.*;
 import uniandes.dpoo.hamburguesas.mundo.*;
 import java.io.File;
@@ -41,17 +42,24 @@ public class RestauranteTest {
         }, "Se esperaba una excepción porque ya hay un pedido en curso.");}
 
     @Test
-    public void testCerrarYGuardarPedido() throws YaHayUnPedidoEnCursoException, NoHayPedidoEnCursoException, IOException{
+    public void testCerrarYGuardarPedido() throws YaHayUnPedidoEnCursoException, NoHayPedidoEnCursoException, IOException {
+        System.out.println("Iniciando pedido...");
         restaurante.iniciarPedido("Camilo Molina", "Calle 20 #2a-51");
+
+        System.out.println("Cerrando y guardando pedido...");
         restaurante.cerrarYGuardarPedido();
 
+        System.out.println("Verificando pedidos cerrados...");
         ArrayList<Pedido> pedidos = restaurante.getPedidos();
-        assertNotNull(pedidos, "La lista de pedidos no debe ser nula.");
-        assertEquals(1, pedidos.size(), "Debe haber un pedido en la lista de pedidos.");
+        System.out.println("Pedidos cerrados: " + pedidos.size());
 
-        Pedido pedidoGuarado = pedidos.get(0);
-        assertEquals("Camilo Molina", pedidoGuarado.getNombreCliente(), "El nombre del cliente no es correcto");
+        assertNotNull(pedidos, "La lista de pedidos no debe ser nula.");
+        assertEquals(1, pedidos.size(), "Debe haber un pedido en la lista de pedidos cerrados.");
+
+        Pedido pedidoGuardado = pedidos.get(0);
+        assertEquals("Camilo Molina", pedidoGuardado.getNombreCliente(), "El cliente del pedido no es el esperado.");
     }
+
 
     @Test
     public void testCerrarYGuardarPedidoSinPedidoEnCurso() {
@@ -153,8 +161,8 @@ public class RestauranteTest {
 
         // Cargamos de una la informacion de los archivos en vez de hacer un test por cada uno
         File ingredientes = new File("data/ingredientes.txt");
-        File menu = new File("data/menuBase.txt");
-        File combos = new File("data/menuCombos.txt");
+        File menu = new File("data/menu.txt");
+        File combos = new File("data/combos.txt");
 
         restaurante.cargarInformacionRestaurante(ingredientes, menu, combos);
 
@@ -164,14 +172,52 @@ public class RestauranteTest {
         ArrayList<ProductoMenu> menuBase = restaurante.getMenuBase();
         ArrayList<Combo> menuCombos = restaurante.getMenuCombos();
 
+        System.out.println("Ingredientes cargados: " + ingredientesCargados.size());
+        System.out.println("Menú base cargado: " + menuBase.size());
+        System.out.println("Menú de combos cargado: " + menuCombos.size());
+        
         assertNotNull(ingredientesCargados, "La lista de ingredientes no debe ser nula.");
         assertNotNull(menuBase, "El menú base no debe ser nulo.");
         assertNotNull(menuCombos, "El menú de combos no debe ser nulo.");
-
+        
+        
         assertTrue(ingredientesCargados.size() > 0, "La lista de ingredientes debe tener información.");
         assertTrue(menuBase.size() > 0, "El menú base debe tener información.");
         assertTrue(menuCombos.size() > 0, "El menú de combos debe tener información.");
     }
+
+    
+    @AfterEach
+    public void tearDown() {
+        // Restaurar restaurante
+        restaurante = null;
+
+        // Reiniciar el contador de pedidos (si aplica)
+        Pedido.reiniciarContadorPedidos();
+
+        // Eliminar archivos generados en la carpeta de facturas
+        File carpetaFacturas = new File("./facturas/");
+        if (carpetaFacturas.exists()) {
+            File[] archivos = carpetaFacturas.listFiles();
+            if (archivos != null) {
+                for (File archivo : archivos) {
+                    if (!archivo.delete()) {
+                        System.out.println("No se pudo eliminar el archivo: " + archivo.getName());
+                    }
+                }
+            }
+        }
+
+        // Eliminar la carpeta de facturas si está vacía
+        if (!carpetaFacturas.delete() && carpetaFacturas.exists()) {
+            System.out.println("No se pudo eliminar la carpeta de facturas.");
+        }
+
+        // Eliminar cualquier otro recurso si aplica
+        System.out.println("Teardown completado.");
+    }
+
+
 
 
 
