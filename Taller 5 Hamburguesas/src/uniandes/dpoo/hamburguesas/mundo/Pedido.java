@@ -53,7 +53,6 @@ public class Pedido
         this.nombreCliente = nombreCliente;
         this.direccionCliente = direccionCliente;
         productos = new ArrayList<Producto>( );
-        System.out.println("Valor actual de numeroPedidos: " + numeroPedidos);
     }
 
     /**
@@ -72,6 +71,15 @@ public class Pedido
     public String getNombreCliente( )
     {
         return nombreCliente;
+    }
+
+    /**
+     * Retorna la dirección del cliente
+     * @return
+     */
+    public String getDireccionCliente( )
+    {
+        return direccionCliente;
     }
 
     /**
@@ -141,21 +149,22 @@ public class Pedido
     {
         StringBuffer sb = new StringBuffer( );
 
-        sb.append( "Cliente: " + nombreCliente + "\n" );
+        sb.append( "\n"+"Cliente: " + nombreCliente + "\n" );
         sb.append( "Dirección: " + direccionCliente + "\n" );
         sb.append( "----------------\n" );
 
-        for( Producto item : productos )
-        {
-            sb.append( item.generarTextoFactura( ) );
+        // Detalles de los productos
+        for (Producto producto : productos) {
+            sb.append(producto.getNombre()).append(" - $").append(producto.getPrecio()).append("\n");
         }
-
+        
+        // Totales
         sb.append( "----------------\n" );
         sb.append( "Precio Neto:  " + getPrecioNetoPedido( ) + "\n" );
         sb.append( "IVA:          " + getPrecioIVAPedido( ) + "\n" );
         sb.append( "Precio Total: " + getPrecioTotalPedido( ) + "\n" );
 
-        System.out.println( sb.toString( ) );
+        System.out.println("Factura generada por metodo generarTextoFactura:"+ sb.toString( ) );
 
         return sb.toString( );
     }
@@ -175,7 +184,7 @@ public class Pedido
         out.close( );
 
         System.out.println( "Factura guardada en " + archivo.getAbsolutePath( ) );
-        System.out.println( factura );
+        System.out.println( "Factura generada y guardada" + factura );
     }
 
 }

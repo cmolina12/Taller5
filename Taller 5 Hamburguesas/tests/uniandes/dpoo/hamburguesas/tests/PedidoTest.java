@@ -116,23 +116,43 @@ public class PedidoTest {
 	}
 
 	@Test
-	public void testGenerarTextoFactura(){
+	public void testGenerarTextoFactura() {
+	    // Agregar productos individuales
+	    pedido.agregarProducto(hamburguesa);
+	    pedido.agregarProducto(papas);
+	    pedido.agregarProducto(bebida);
 
-		pedido.agregarProducto(hamburguesa);
-		pedido.agregarProducto(papas);
-		pedido.agregarProducto(bebida);
+	    // Verificar factura antes del combo
+	    String factura = pedido.generarTextoFactura();
+	    String facturaEsperada = "\nCliente: Camilo Molina\n" +
+	                             "Dirección: Calle 20 #2a-51\n" +
+	                             "----------------\n" +
+	                             "Hamburguesa - $10000\n" +
+	                             "Papas - $5000\n" +
+	                             "Bebida - $3000\n" +
+	                             "----------------\n" +
+	                             "Precio Neto:  18000\n" +
+	                             "IVA:          3420\n" +
+	                             "Precio Total: 21420\n";
+	    assertEquals(facturaEsperada, factura, "La factura no es la esperada.");
 
-		String factura = pedido.generarTextoFactura();
-		String facturaEsperada = "Cliente: Camilo Molina\nDirección: Calle 20 #2a-51\n\nProductos:\n\nHamburguesa - $10000\nPapas - $5000\nBebida - $3000\n\nTotal: $21420\n";
-		assertEquals(facturaEsperada, factura, "La factura no es la esperada.");
-
-		pedido.agregarProducto(combo);
-		factura = pedido.generarTextoFactura();
-		facturaEsperada = "Cliente: Camilo Molina\nDirección: Calle 20 #2a-51\n\nProductos:\n\nHamburguesa - $10000\nPapas - $5000\nBebida - $3000\nCombo 1 - $34200\n\nTotal: $40698\n";
-		assertEquals(facturaEsperada, factura, "La factura no es la esperada después de agregar un combo.");
-
-
+	    // Agregar combo y verificar factura
+	    pedido.agregarProducto(combo);
+	    factura = pedido.generarTextoFactura();
+	    facturaEsperada = "\nCliente: Camilo Molina\n" +
+	                      "Dirección: Calle 20 #2a-51\n" +
+	                      "----------------\n" +
+	                      "Hamburguesa - $10000\n" +
+	                      "Papas - $5000\n" +
+	                      "Bebida - $3000\n" +
+	                      "Combo 1 - $16200\n" +
+	                      "----------------\n" +
+	                      "Precio Neto:  34200\n" +
+	                      "IVA:          6498\n" +
+	                      "Precio Total: 40698\n";
+	    assertEquals(facturaEsperada, factura, "La factura no es la esperada después de agregar un combo.");
 	}
+
 
 	@Test
 	public void testGuardarFactura() throws FileNotFoundException {
@@ -152,16 +172,22 @@ public class PedidoTest {
 	
 		String factura = contenido.toString();
 	
-		// Verificamos que los datos relevantes estén en la factura
-		assertTrue(factura.contains("Cliente: Juan Pérez"), "El nombre del cliente no está en la factura.");
-		assertTrue(factura.contains("Hamburguesa"), "El producto 'Hamburguesa' no está en la factura.");
-		assertTrue(factura.contains("Combo Completo"), "El combo no está en la factura.");
-		assertTrue(factura.contains("Precio Neto:  26200"), "El precio neto no es el esperado.");
-		assertTrue(factura.contains("IVA:          " + (int) (26200 * 0.19)), "El IVA no es el esperado.");
-		assertTrue(factura.contains("Precio Total: " + (int) (26200 * 1.19)), "El precio total no está en la factura.");
-	
-		// Eliminamos el archivo después de la prueba
-		archivoFactura.delete();
+		// Factura esperada
+	    String facturaEsperada = "\nCliente: Camilo Molina\n" +
+	                             "Dirección: Calle 20 #2a-51\n" +
+	                             "----------------\n" +
+	                             "Hamburguesa - $10000\n" +
+	                             "Combo 1 - $16200\n" +
+	                             "----------------\n" +
+	                             "Precio Neto:  26200\n" +
+	                             "IVA:          4978\n" +
+	                             "Precio Total: 31178\n";
+
+	    // Validar la factura generada
+	    assertEquals(facturaEsperada, factura, "La factura guardada no es la esperada.");
+
+	    // Eliminar el archivo después de la prueba
+	    archivoFactura.delete();
 	}
 	
 	@AfterEach
