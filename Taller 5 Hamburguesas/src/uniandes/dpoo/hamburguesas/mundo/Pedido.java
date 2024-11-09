@@ -145,29 +145,31 @@ public class Pedido
      * 5. El valor total del pedido
      * @return
      */
-    public String generarTextoFactura( )
-    {
-        StringBuffer sb = new StringBuffer( );
+    public String generarTextoFactura() {
+        StringBuilder sb = new StringBuilder();
 
-        sb.append( "\n"+"Cliente: " + nombreCliente + "\n" );
-        sb.append( "Dirección: " + direccionCliente + "\n" );
-        sb.append( "----------------\n" );
+        // Información del cliente
+        sb.append("----------------\n");
+        sb.append("Cliente: ").append(nombreCliente).append("\n");
+        sb.append("Dirección: ").append(direccionCliente).append("\n");
+        sb.append("----------------\n");
 
-        // Detalles de los productos
+        // Información de los productos
         for (Producto producto : productos) {
-            sb.append(producto.getNombre()).append(" - $").append(producto.getPrecio()).append("\n");
+            sb.append(producto.generarTextoFactura());
+            sb.append("----------------\n"); // Separador entre productos
         }
-        
+
         // Totales
-        sb.append( "----------------\n" );
-        sb.append( "Precio Neto:  " + getPrecioNetoPedido( ) + "\n" );
-        sb.append( "IVA:          " + getPrecioIVAPedido( ) + "\n" );
-        sb.append( "Precio Total: " + getPrecioTotalPedido( ) + "\n" );
+        sb.append("Precio Neto:            $").append(getPrecioNetoPedido()).append("\n");
+        sb.append("IVA:                    $").append(getPrecioIVAPedido()).append("\n");
+        sb.append("Precio Total:           $").append(getPrecioTotalPedido()).append("\n");
+        sb.append("----------------\n");
 
-        System.out.println("Factura generada por metodo generarTextoFactura:"+ sb.toString( ) );
-
-        return sb.toString( );
+        return sb.toString();
     }
+
+    
 
     /**
      * Guarda la factura del pedido en el archivo indicado
@@ -184,7 +186,6 @@ public class Pedido
         out.close( );
 
         System.out.println( "Factura guardada en " + archivo.getAbsolutePath( ) );
-        System.out.println( "Factura generada y guardada" + factura );
     }
 
 }

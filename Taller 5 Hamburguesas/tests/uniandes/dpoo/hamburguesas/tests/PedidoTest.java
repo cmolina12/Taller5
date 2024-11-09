@@ -124,71 +124,110 @@ public class PedidoTest {
 
 	    // Verificar factura antes del combo
 	    String factura = pedido.generarTextoFactura();
-	    String facturaEsperada = "\nCliente: Camilo Molina\n" +
+	    String facturaEsperada = 
+								"----------------\n"+
+	    						"Cliente: Camilo Molina\n" +
 	                             "Dirección: Calle 20 #2a-51\n" +
 	                             "----------------\n" +
-	                             "Hamburguesa - $10000\n" +
-	                             "Papas - $5000\n" +
-	                             "Bebida - $3000\n" +
+	                             "Hamburguesa\n" +
+	                             "Precio base:            $10000\n" +
 	                             "----------------\n" +
-	                             "Precio Neto:  18000\n" +
-	                             "IVA:          3420\n" +
-	                             "Precio Total: 21420\n";
+	                             "----------------\n"+
+	                             "Papas\n" +
+	                             "Precio base:            $5000\n" +
+	                             "----------------\n" +
+	                             "----------------\n"+
+	                             "Bebida\n" +
+	                             "Precio base:            $3000\n" +
+	                             "----------------\n" +
+	                             "----------------\n"+
+	                             "Precio Neto:            $18000\n" +
+	                             "IVA:                    $3420\n" +
+	                             "Precio Total:           $21420\n" +
+	                             "----------------\n";
 	    assertEquals(facturaEsperada, factura, "La factura no es la esperada.");
 
 	    // Agregar combo y verificar factura
 	    pedido.agregarProducto(combo);
 	    factura = pedido.generarTextoFactura();
-	    facturaEsperada = "\nCliente: Camilo Molina\n" +
+	    facturaEsperada = 
+						"----------------\n"+
+	    				"Cliente: Camilo Molina\n" +
 	                      "Dirección: Calle 20 #2a-51\n" +
 	                      "----------------\n" +
-	                      "Hamburguesa - $10000\n" +
-	                      "Papas - $5000\n" +
-	                      "Bebida - $3000\n" +
-	                      "Combo 1 - $16200\n" +
+	                      "Hamburguesa\n" +
+	                      "Precio base:            $10000\n" +
 	                      "----------------\n" +
-	                      "Precio Neto:  34200\n" +
-	                      "IVA:          6498\n" +
-	                      "Precio Total: 40698\n";
+                          "----------------\n"+
+	                      "Papas\n" +
+	                      "Precio base:            $5000\n" +
+	                      "----------------\n" +
+                          "----------------\n"+
+	                      "Bebida\n" +
+	                      "Precio base:            $3000\n" +
+	                      "----------------\n" +
+                          "----------------\n"+
+	                      "Combo 1\n" +
+	                      "Precio base sin descuento:            $18000\n" +
+	                      "Descuento aplicado:                   10%\n" +
+	                      "Precio final del combo:               $16200\n" +
+	                      "----------------\n" +
+                          "----------------\n"+
+	                      "Precio Neto:            $34200\n" +
+	                      "IVA:                    $6498\n" +
+	                      "Precio Total:           $40698\n" +
+	                      "----------------\n";
 	    assertEquals(facturaEsperada, factura, "La factura no es la esperada después de agregar un combo.");
 	}
 
 
+
 	@Test
 	public void testGuardarFactura() throws FileNotFoundException {
-		pedido.agregarProducto(hamburguesa);
-		pedido.agregarProducto(combo);
-	
-		File archivoFactura = new File("factura_test.txt");
-		pedido.guardarFactura(archivoFactura);
-	
-		// Leer el contenido del archivo para verificar
-		Scanner scanner = new Scanner(archivoFactura);
-		StringBuilder contenido = new StringBuilder();
-		while (scanner.hasNextLine()) {
-			contenido.append(scanner.nextLine()).append("\n");
-		}
-		scanner.close();
-	
-		String factura = contenido.toString();
-	
-		// Factura esperada
-	    String facturaEsperada = "\nCliente: Camilo Molina\n" +
+	    // Agregar productos al pedido
+	    pedido.agregarProducto(hamburguesa);
+	    pedido.agregarProducto(combo);
+
+	    // Guardar la factura en un archivo
+	    File archivoFactura = new File("factura_test.txt");
+	    pedido.guardarFactura(archivoFactura);
+
+	    // Leer el contenido del archivo generado
+	    StringBuilder contenido = new StringBuilder();
+	    try (Scanner scanner = new Scanner(archivoFactura)) {
+	        while (scanner.hasNextLine()) {
+	            contenido.append(scanner.nextLine()).append("\n");
+	        }
+	    }
+
+	    // Factura esperada
+	    String facturaEsperada = 
+	    						"----------------\n"+
+	    						"Cliente: Camilo Molina\n" +
 	                             "Dirección: Calle 20 #2a-51\n" +
 	                             "----------------\n" +
-	                             "Hamburguesa - $10000\n" +
-	                             "Combo 1 - $16200\n" +
+	                             "Hamburguesa\n" +
+	                             "Precio base:            $10000\n" +
 	                             "----------------\n" +
-	                             "Precio Neto:  26200\n" +
-	                             "IVA:          4978\n" +
-	                             "Precio Total: 31178\n";
+	                             "----------------\n"+
+	                             "Combo 1\n" +
+	                             "Precio base sin descuento:            $18000\n" +
+	                             "Descuento aplicado:                   10%\n" +
+	                             "Precio final del combo:               $16200\n" +
+	                             "----------------\n" +
+	                             "----------------\n"+
+	                             "Precio Neto:            $26200\n" +
+	                             "IVA:                    $4978\n" +
+	                             "Precio Total:           $31178\n" +
+	                             "----------------\n";
 
-	    // Validar la factura generada
-	    assertEquals(facturaEsperada, factura, "La factura guardada no es la esperada.");
+	    // Validar el contenido del archivo
+	    assertEquals(facturaEsperada, contenido.toString(), "La factura guardada no coincide con la esperada.");
 
 	    // Eliminar el archivo después de la prueba
 	    archivoFactura.delete();
 	}
+
 	
 	@AfterEach
 

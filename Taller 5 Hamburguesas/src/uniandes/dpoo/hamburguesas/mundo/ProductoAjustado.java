@@ -87,44 +87,41 @@ public class ProductoAjustado implements Producto
      * 
      * El texto incluye el producto base, los ingredientes adicionales con su costo, los ingredientes eliminados, y el precio total
      */
+
     @Override
-    public String generarTextoFactura( )
-    {
-        StringBuffer sb = new StringBuffer( );
-        sb.append(productoBase.getNombre()); // Nombre del producto base
-        sb.append("            " + productoBase.getPrecio( ) + "\n"); // Mostrar el precio del producto base
-       
-        
-        
-        for( Ingrediente ing : agregados )
-        {
-            sb.append( "    +" + ing.getNombre( ) );
-            sb.append( "                " + ing.getCostoAdicional( ) );
+    public String generarTextoFactura() {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(productoBase.getNombre()).append("\n"); // Nombre del producto base
+        sb.append("Precio base:            $").append(productoBase.getPrecio()).append("\n"); // Precio base del producto
+
+        sb.append("\n--- Ingredientes añadidos ---\n");
+        for (Ingrediente ing : agregados) {
+            sb.append("    +").append(ing.getNombre())
+              .append("                $").append(ing.getCostoAdicional()).append("\n");
         }
-        for( Ingrediente ing : eliminados )
-        {
-            sb.append( "    -" + ing.getNombre( ) );
+
+        sb.append("\n--- Ingredientes eliminados ---\n");
+        for (Ingrediente ing : eliminados) {
+            sb.append("    -").append(ing.getNombre()).append("\n");
         }
-        
+
+        sb.append("\n--- Ingredientes que afectan el precio ---\n");
         // Crear la lista de ingredientes que afectan el precio
         ArrayList<Ingrediente> ingredientesFinales = new ArrayList<>(agregados);
         for (Ingrediente ingEliminado : eliminados) {
             ingredientesFinales.remove(ingEliminado);
         }
 
-        // Mostrar los ingredientes finales (que afectan el precio) con su costo
         for (Ingrediente ing : ingredientesFinales) {
-            sb.append("    +").append(ing.getNombre());
-            sb.append("                ").append(ing.getCostoAdicional()).append("\n");
+            sb.append("    +").append(ing.getNombre())
+              .append("                $").append(ing.getCostoAdicional()).append("\n");
         }
 
-        sb.append( "            " + getPrecio( ) + "\n" );
+        sb.append("\nPrecio final del producto: $").append(getPrecio()).append("\n");
 
-        // Linea de depuracion
-        System.out.println(sb.toString());
-        
-        return sb.toString( );
-        
+        return sb.toString();
     }
+
 
 }

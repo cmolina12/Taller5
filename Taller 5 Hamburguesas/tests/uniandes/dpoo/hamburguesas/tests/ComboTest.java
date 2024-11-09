@@ -52,23 +52,32 @@ public class ComboTest
     }
 
     @Test
-    public void testGenerarTextoFactura(){
+    public void testGenerarTextoFactura() {
         String facturaSinDescuento = comboSinDescuento.generarTextoFactura();
         String facturaConDescuento = comboConDescuento.generarTextoFactura();
         String facturaDescuentoCompleto = comboDescuentoCompleto.generarTextoFactura();
 
-        assertTrue(facturaSinDescuento.contains("Combo sin descuento"), "La factura del combo sin descuento debería contener el nombre del combo");
-        assertTrue(facturaSinDescuento.contains("0.0"), "La factura del combo sin descuento debería contener el descuento del combo");
-        assertTrue(facturaSinDescuento.contains("18000"), "La factura del combo sin descuento debería contener el precio del combo");
-    
-        assertTrue(facturaConDescuento.contains("Combo con descuento 50%"), "La factura del combo con descuento 50% debería contener el nombre del combo");
-        assertTrue(facturaConDescuento.contains("0.5"), "La factura del combo con descuento 50% debería contener el descuento del combo");
-        assertTrue(facturaConDescuento.contains("9000"), "La factura del combo con descuento 50% debería contener el precio del combo");
+        String facturaEsperadaSinDescuento = "Combo sin descuento\n" +
+                                             "Precio base sin descuento:            $18000\n" +
+                                             "Descuento aplicado:                   0%\n" +
+                                             "Precio final del combo:               $18000\n"+
+                                             ("----------------\n");
 
-        assertTrue(facturaDescuentoCompleto.contains("Combo con descuento completo (Gratis)"), "La factura del combo con descuento completo debería contener el nombre del combo");
-        assertTrue(facturaDescuentoCompleto.contains("1.0"), "La factura del combo con descuento completo debería contener el descuento del combo");
-        assertTrue(facturaDescuentoCompleto.contains("0"), "La factura del combo con descuento completo debería contener el precio del combo");
-    
+        String facturaEsperadaConDescuento = "Combo con descuento 50%\n" +
+                                             "Precio base sin descuento:            $18000\n" +
+                                             "Descuento aplicado:                   50%\n" +
+                                             "Precio final del combo:               $9000\n"+
+                                             ("----------------\n");
+        
+        String facturaEsperadaDescuentoCompleto = "Combo con descuento completo (Gratis)\n" +
+                                                  "Precio base sin descuento:            $18000\n" +
+                                                  "Descuento aplicado:                   100%\n" +
+                                                  "Precio final del combo:               $0\n"+
+                                                  ("----------------\n");
+        
+        assertEquals(facturaEsperadaSinDescuento, facturaSinDescuento, "La factura generada para el combo sin descuento no es la esperada.");
+        assertEquals(facturaEsperadaConDescuento, facturaConDescuento, "La factura generada para el combo con descuento 50% no es la esperada.");
+        assertEquals(facturaEsperadaDescuentoCompleto, facturaDescuentoCompleto, "La factura generada para el combo con descuento completo no es la esperada.");
     }
 
 

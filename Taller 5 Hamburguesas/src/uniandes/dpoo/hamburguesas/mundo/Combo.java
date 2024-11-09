@@ -58,20 +58,35 @@ public class Combo implements Producto
         return ( int ) ( precio - (precio*descuento) );
     }
 
+    public int getPrecioOriginal() {
+    	
+    	double precio = 0;
+    	for( Producto i : itemsCombo )
+        {
+            precio += i.getPrecio( );
+        }
+    	
+    	return (int) (precio);
+    	
+    }
     /**
      * Genera el texto que debe aparecer en la factura.
      * 
      * El texto incluye el nombre del combo, su costo y el valor del descuento
      */
-    @Override
-    public String generarTextoFactura( )
-    {
-        StringBuffer sb = new StringBuffer( );
-        sb.append( "Combo " + nombreCombo + "\n" );
-        sb.append( " Descuento: " + descuento + "\n" );
-        sb.append( "            " + getPrecio( ) + "\n" );
 
-        return sb.toString( );
+    @Override
+    public String generarTextoFactura() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getNombre()).append("\n");
+        sb.append("Precio base sin descuento:            $").append(getPrecioOriginal()).append("\n");
+        sb.append("Descuento aplicado:                   ").append((int) (descuento * 100)).append("%\n");
+        sb.append("Precio final del combo:               $").append(getPrecio()).append("\n");
+        sb.append("----------------\n");
+
+        return sb.toString();
     }
+
 
 }

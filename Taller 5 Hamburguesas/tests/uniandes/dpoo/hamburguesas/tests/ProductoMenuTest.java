@@ -31,7 +31,11 @@ public class ProductoMenuTest {
 
     @Test
     public void testGenerarTextoFactura() {
-        assertEquals("Hamburguesa\n            10000\n", productoMenu.generarTextoFactura(), "El texto de la factura no es el esperado.");
+        String facturaEsperada = "Hamburguesa\n" +
+                                 "Precio base:            $10000\n"+
+       	                      	"----------------\n";
+        
+        assertEquals(facturaEsperada, productoMenu.generarTextoFactura(), "El texto de la factura no es el esperado.");
     }
 
    @AfterEach

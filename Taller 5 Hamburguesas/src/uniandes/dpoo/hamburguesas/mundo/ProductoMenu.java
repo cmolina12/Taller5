@@ -44,13 +44,15 @@ public class ProductoMenu implements Producto
      * El texto incluye el nombre del producto y su costo
      */
     @Override
-    public String generarTextoFactura( )
-    {
-        StringBuffer sb = new StringBuffer( );
-        sb.append( nombre + "\n" );
-        sb.append( "            " + getPrecio( ) + "\n" );
+    public String generarTextoFactura() {
+        StringBuilder sb = new StringBuilder();
 
-        return sb.toString( );
+        sb.append(getNombre()).append("\n");
+        sb.append("Precio base:            $").append(getPrecio()).append("\n");
+        sb.append("----------------\n");
+
+        return sb.toString();
     }
+
 
 }
